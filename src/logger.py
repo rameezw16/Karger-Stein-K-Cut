@@ -27,6 +27,14 @@ class PerformanceLogger:
             format='%(asctime)s - %(levelname)s - %(message)s'
         )
         
+        # Configure basic logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(message)s',
+            datefmt='%H:%M:%S'
+        )
+        self.logger = logging.getLogger('KargerStein')
+        
     def _init_csv(self):
         """Initialize the CSV file with headers if it doesn't exist."""
         if not self.csv_path.exists():
@@ -124,4 +132,13 @@ class PerformanceLogger:
             'min_runtime_ms': min(runtimes),
             'max_runtime_ms': max(runtimes),
             'avg_runtime_ms': sum(runtimes) / len(runtimes)
-        } 
+        }
+
+    def log(self, message: str) -> None:
+        """
+        Log a message with timestamp.
+        
+        Args:
+            message: Message to log
+        """
+        self.logger.info(message) 

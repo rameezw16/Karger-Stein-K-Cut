@@ -24,6 +24,9 @@ class KargerStein:
         self._lambda_k = None  # Cache for λₖ estimation
         self.logger = PerformanceLogger()
         
+        # Initialize supernodes tracking
+        self.supernodes = {node: {node} for node in graph.nodes()}
+        
         # Validate input
         if not isinstance(graph, nx.Graph):
             raise ValueError("Input must be a NetworkX graph")
@@ -34,7 +37,8 @@ class KargerStein:
             
     def _select_random_edge(self, graph: nx.Graph) -> Tuple[int, int]:
         """
-        Select an edge with probability proportional to its weight.
+        Select an edge with probability proportional to its weight and the sum of its endpoint degrees.
+        This favors edges connected to high-degree nodes to speed up contraction.
         
         Args:
             graph: Current graph state
@@ -43,10 +47,26 @@ class KargerStein:
             Tuple of (u, v) representing the selected edge
         """
         edges = list(graph.edges(data=True))
-        weights = [data['weight'] for _, _, data in edges]
-        total_weight = sum(weights)
-        probabilities = [w/total_weight for w in weights]
         
+        # Compute degrees for all nodes
+        degrees = dict(graph.degree())
+        
+        # Calculate weights incorporating degrees: weight * (deg[u] + deg[v])
+        weights = []
+        for u, v, data in edges:
+            edge_weight = data['weight']
+            degree_sum = degrees[u] + degrees[v]
+            weights.append(edge_weight * degree_sum)
+            
+        # Normalize weights to get probabilities
+        total_weight = sum(weights)
+        if total_weight == 0:
+            # If all weights are zero, fall back to uniform selection
+            probabilities = [1/len(edges)] * len(edges)
+        else:
+            probabilities = [w/total_weight for w in weights]
+        
+        # Sample edge based on probabilities
         selected_idx = self._rng.choice(len(edges), p=probabilities)
         return edges[selected_idx][0], edges[selected_idx][1]
         
@@ -66,6 +86,10 @@ class KargerStein:
         
         # Use the utility function to contract the edge
         contract_edge(new_graph, (u, v))
+        
+        # Update supernodes tracking
+        self.supernodes[u] = self.supernodes[u].union(self.supernodes[v])
+        del self.supernodes[v]
         
         return new_graph
         
@@ -106,38 +130,145 @@ class KargerStein:
         min_cut_weight = float('inf')
         best_partition = None
         all_min_cuts = []
+        num_successes = 0  # Counter for successful trials
         
         for trial in range(num_trials):
             # Create a copy of the graph for this trial
             graph = self.original_graph.copy()
             
-            # Contract until we have k vertices
-            while graph.number_of_nodes() > self.k:
-                u, v = self._select_random_edge(graph)
-                graph = self._contract_edge(graph, u, v)
-                
-            # Get the partition from the final contracted graph
-            partition = [set() for _ in range(self.k)]
-            for node in graph.nodes():
-                partition[0].add(node)  # TODO: Track original nodes in supernodes
-                
-            # Calculate cut weight
+            # Reset supernodes tracking for this trial
+            self.supernodes = {node: {node} for node in graph.nodes()}
+            
+            # Use recursive contraction strategy
+            result = self._recursive_contraction(graph)
+            
+            # Build partition from supernodes
+            # Each supernode is a set of original nodes that were contracted together
+            partition = []
+            for supernode in self.supernodes.values():
+                if supernode:  # Only add non-empty supernodes
+                    partition.append(supernode)
+            
+            # Ensure we have exactly k partitions
+            # The recursive contraction might not always result in exactly k partitions
+            # so we need to adjust the partition count
+            
+            if len(partition) > self.k:
+                # If we have more than k partitions, merge the smallest ones
+                # This helps maintain balanced partition sizes
+                while len(partition) > self.k:
+                    # Find two smallest partitions to minimize the impact on cut weight
+                    partition.sort(key=len)
+                    # Merge the two smallest partitions
+                    merged = partition[0].union(partition[1])
+                    partition = [merged] + partition[2:]
+                    
+            elif len(partition) < self.k:
+                # If we have fewer than k partitions, split the largest one
+                # This ensures we meet the k-partition requirement
+                while len(partition) < self.k:
+                    # Sort partitions by size (largest first) to find the best candidate for splitting
+                    partition.sort(key=len, reverse=True)
+                    # Split the largest partition into two roughly equal parts
+                    largest = partition[0]
+                    split_point = len(largest) // 2
+                    # Create two new partitions from the split
+                    partition = [set(list(largest)[:split_point]), 
+                               set(list(largest)[split_point:])] + partition[1:]
+            
+            # Calculate cut weight for the current partition
+            # This is the sum of weights of edges crossing between partitions
             cut_weight = self._calculate_cut_weight(self.original_graph, partition)
             
+            # Update best results if we found a better cut
             if cut_weight < min_cut_weight:
                 min_cut_weight = cut_weight
                 best_partition = partition
                 all_min_cuts = [partition]
+                num_successes = 1  # Reset counter when new minimum found
             elif cut_weight == min_cut_weight:
                 # Check if this is a new distinct cut
                 if not self._is_duplicate_cut(partition, all_min_cuts):
                     all_min_cuts.append(partition)
+                num_successes += 1  # Increment counter for successful trial
+                
+        # Calculate and log success rate
+        success_rate = num_successes / num_trials
+        self.logger.log(f"Success rate: {success_rate:.2%} ({num_successes}/{num_trials} trials found minimum cut)")
                 
         return {
             'weight': min_cut_weight,
             'partitions': best_partition,
-            'all_min_cuts': all_min_cuts
+            'all_min_cuts': all_min_cuts,
+            'success_rate': success_rate,
+            'num_successes': num_successes,
+            'num_trials': num_trials
         }
+        
+    def _recursive_contraction(self, graph: nx.Graph, threshold: int = 6) -> nx.Graph:
+        """
+        Recursive contraction strategy for Karger-Stein algorithm.
+        
+        Args:
+            graph: Current graph state
+            threshold: Number of nodes below which to compute cut directly
+            
+        Returns:
+            Contracted graph
+        """
+        n = graph.number_of_nodes()
+        
+        # Base case: if graph has ≤ threshold nodes, compute cut directly
+        if n <= threshold:
+            return graph
+            
+        # Recursive case: contract down to t = ceil(n / √2) nodes
+        t = math.ceil(n / math.sqrt(2))
+        
+        # Create two copies of the graph for independent contraction
+        graph1 = graph.copy()
+        graph2 = graph.copy()
+        
+        # Save current supernodes state
+        original_supernodes = self.supernodes.copy()
+        
+        # Contract first copy
+        while graph1.number_of_nodes() > t:
+            u, v = self._select_random_edge(graph1)
+            graph1 = self._contract_edge(graph1, u, v)
+            
+        # Save supernodes state after first contraction
+        supernodes1 = self.supernodes.copy()
+        
+        # Restore original supernodes for second contraction
+        self.supernodes = original_supernodes.copy()
+        
+        # Contract second copy
+        while graph2.number_of_nodes() > t:
+            u, v = self._select_random_edge(graph2)
+            graph2 = self._contract_edge(graph2, u, v)
+            
+        # Save supernodes state after second contraction
+        supernodes2 = self.supernodes.copy()
+        
+        # Recursively find cuts for both contracted graphs
+        # Use first supernodes state
+        self.supernodes = supernodes1
+        result1 = self._recursive_contraction(graph1, threshold)
+        cut1 = self._calculate_cut_weight(self.original_graph, list(self.supernodes.values()))
+        
+        # Use second supernodes state
+        self.supernodes = supernodes2
+        result2 = self._recursive_contraction(graph2, threshold)
+        cut2 = self._calculate_cut_weight(self.original_graph, list(self.supernodes.values()))
+        
+        # Return the graph with the smaller cut and its corresponding supernodes state
+        if cut1 <= cut2:
+            self.supernodes = supernodes1
+            return result1
+        else:
+            self.supernodes = supernodes2
+            return result2
         
     def _is_duplicate_cut(self, partition: List[Set[int]], existing_cuts: List[List[Set[int]]]) -> bool:
         """
@@ -277,6 +408,10 @@ class KargerStein:
         
         for _ in range(num_trials):
             graph = self.original_graph.copy()
+            
+            # Reset supernodes tracking for this trial
+            self.supernodes = {node: {node} for node in graph.nodes()}
+            
             while graph.number_of_nodes() > 2:
                 u, v = self._select_random_edge(graph)
                 graph = self._contract_edge(graph, u, v)
