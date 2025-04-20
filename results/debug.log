@@ -5,3 +5,144 @@
 2025-04-20 21:22:30,254 - INFO - Success rate: 100.00% (64/64 trials found minimum cut)
 2025-04-20 21:22:43,987 - INFO - Success rate: 3.39% (6/177 trials found minimum cut)
 2025-04-20 21:22:53,857 - INFO - Success rate: 2.26% (3/133 trials found minimum cut)
+2025-04-20 22:26:34,508 - INFO - Success rate: 100.00% (64/64 trials found minimum cut)
+2025-04-20 22:26:44,103 - INFO - Success rate: 3.39% (6/177 trials found minimum cut)
+2025-04-20 22:26:47,071 - INFO - Success rate: 0.75% (1/133 trials found minimum cut)
+2025-04-20 22:26:55,590 - INFO - Success rate: 100.00% (22/22 trials found minimum cut)
+2025-04-20 22:36:39,718 - INFO - Success rate: 100.00% (64/64 trials found minimum cut)
+2025-04-20 22:36:42,878 - INFO - Success rate: 100.00% (22/22 trials found minimum cut)
+2025-04-20 22:40:53,690 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:40:53,690 - INFO - Trial 1: cut weight = 6.0
+2025-04-20 22:40:53,690 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:40:53,690 - INFO - Trial 2: cut weight = 6.0
+2025-04-20 22:40:53,692 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:40:53,692 - INFO - Trial 3: cut weight = 6.0
+2025-04-20 22:40:53,692 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:40:53,692 - INFO - Trial 4: cut weight = 6.0
+2025-04-20 22:40:53,692 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:40:53,692 - INFO - Trial 5: cut weight = 6.0
+2025-04-20 22:40:53,692 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:40:53,692 - INFO -   Minimum weight: 6.0
+2025-04-20 22:40:53,692 - INFO -   Average weight: 6.0
+2025-04-20 22:40:53,693 - INFO -   Variance: 0.0
+2025-04-20 22:40:53,693 - INFO - Success rate: 100.00% (22/22 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Trial 1: cut weight = 8.0
+2025-04-20 22:41:00,588 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Trial 2: cut weight = 8.0
+2025-04-20 22:41:00,588 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Trial 3: cut weight = 8.0
+2025-04-20 22:41:00,588 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Trial 4: cut weight = 8.0
+2025-04-20 22:41:00,588 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:00,588 - INFO - Trial 5: cut weight = 8.0
+2025-04-20 22:41:00,588 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:41:00,588 - INFO -   Minimum weight: 8.0
+2025-04-20 22:41:00,588 - INFO -   Average weight: 8.0
+2025-04-20 22:41:00,588 - INFO -   Variance: 0.0
+2025-04-20 22:41:00,590 - INFO - Success rate: 100.00% (40/40 trials found minimum cut)
+2025-04-20 22:41:04,521 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:04,522 - INFO - Trial 1: cut weight = 4.0
+2025-04-20 22:41:04,522 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:04,522 - INFO - Trial 2: cut weight = 4.0
+2025-04-20 22:41:04,524 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:04,524 - INFO - Trial 3: cut weight = 7.0
+2025-04-20 22:41:04,524 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:04,524 - INFO - Trial 4: cut weight = 4.0
+2025-04-20 22:41:04,528 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:04,528 - INFO - Trial 5: cut weight = 4.0
+2025-04-20 22:41:04,528 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:41:04,528 - INFO -   Minimum weight: 4.0
+2025-04-20 22:41:04,528 - INFO -   Average weight: 4.6
+2025-04-20 22:41:04,528 - INFO -   Variance: 1.44
+2025-04-20 22:41:04,709 - INFO - Success rate: 2.26% (4/177 trials found minimum cut)
+2025-04-20 22:41:07,461 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:07,462 - INFO - Trial 1: cut weight = 50.35999999999999
+2025-04-20 22:41:07,463 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:07,463 - INFO - Trial 2: cut weight = 38.839999999999996
+2025-04-20 22:41:07,464 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:07,464 - INFO - Trial 3: cut weight = 49.13999999999999
+2025-04-20 22:41:07,465 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:07,465 - INFO - Trial 4: cut weight = 32.86
+2025-04-20 22:41:07,467 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:41:07,467 - INFO - Trial 5: cut weight = 55.239999999999995
+2025-04-20 22:41:07,467 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:41:07,467 - INFO -   Minimum weight: 32.86
+2025-04-20 22:41:07,467 - INFO -   Average weight: 45.288
+2025-04-20 22:41:07,467 - INFO -   Variance: 67.12745599999997
+2025-04-20 22:41:07,742 - INFO - Success rate: 0.43% (1/230 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Trial 1: cut weight = 6.0
+2025-04-20 22:43:10,274 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Trial 2: cut weight = 6.0
+2025-04-20 22:43:10,274 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Trial 3: cut weight = 6.0
+2025-04-20 22:43:10,274 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Trial 4: cut weight = 6.0
+2025-04-20 22:43:10,274 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:10,274 - INFO - Trial 5: cut weight = 6.0
+2025-04-20 22:43:10,274 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:43:10,274 - INFO -   Minimum weight: 6.0
+2025-04-20 22:43:10,274 - INFO -   Average weight: 6.0
+2025-04-20 22:43:10,274 - INFO -   Variance: 0.0
+2025-04-20 22:43:10,276 - INFO - Success rate: 100.00% (22/22 trials found minimum cut)
+2025-04-20 22:43:36,786 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:36,786 - INFO - Trial 1: cut weight = 94.10000000000002
+2025-04-20 22:43:36,787 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:36,787 - INFO - Trial 2: cut weight = 108.8
+2025-04-20 22:43:36,788 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:36,788 - INFO - Trial 3: cut weight = 100.60000000000001
+2025-04-20 22:43:36,789 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:36,789 - INFO - Trial 4: cut weight = 97.7
+2025-04-20 22:43:36,789 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:36,789 - INFO - Trial 5: cut weight = 107.19999999999999
+2025-04-20 22:43:36,789 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:43:36,789 - INFO -   Minimum weight: 94.10000000000002
+2025-04-20 22:43:36,789 - INFO -   Average weight: 101.68
+2025-04-20 22:43:36,789 - INFO -   Variance: 31.12559999999989
+2025-04-20 22:43:36,903 - INFO - Success rate: 1.50% (2/133 trials found minimum cut)
+2025-04-20 22:43:56,455 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:56,455 - INFO - Trial 1: cut weight = 45.79999999999999
+2025-04-20 22:43:56,457 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:56,457 - INFO - Trial 2: cut weight = 47.900000000000006
+2025-04-20 22:43:56,460 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:56,460 - INFO - Trial 3: cut weight = 37.199999999999996
+2025-04-20 22:43:56,462 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:56,463 - INFO - Trial 4: cut weight = 51.8
+2025-04-20 22:43:56,465 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:43:56,465 - INFO - Trial 5: cut weight = 57.199999999999996
+2025-04-20 22:43:56,465 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:43:56,465 - INFO -   Minimum weight: 37.199999999999996
+2025-04-20 22:43:56,465 - INFO -   Average weight: 47.98
+2025-04-20 22:43:56,465 - INFO -   Variance: 44.113600000000005
+2025-04-20 22:43:56,879 - INFO - Success rate: 0.43% (1/230 trials found minimum cut)
+2025-04-20 22:44:10,621 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:44:10,621 - INFO - Trial 1: cut weight = 3.0
+2025-04-20 22:44:10,622 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:44:10,622 - INFO - Trial 2: cut weight = 4.0
+2025-04-20 22:44:10,623 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:44:10,623 - INFO - Trial 3: cut weight = 5.0
+2025-04-20 22:44:10,623 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:44:10,623 - INFO - Trial 4: cut weight = 4.0
+2025-04-20 22:44:10,625 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:44:10,625 - INFO - Trial 5: cut weight = 5.0
+2025-04-20 22:44:10,625 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:44:10,625 - INFO -   Minimum weight: 3.0
+2025-04-20 22:44:10,625 - INFO -   Average weight: 4.2
+2025-04-20 22:44:10,625 - INFO -   Variance: 0.5599999999999999
+2025-04-20 22:44:10,812 - INFO - Success rate: 2.82% (5/177 trials found minimum cut)
+2025-04-20 22:45:46,543 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:45:46,543 - INFO - Trial 1: cut weight = 10.0
+2025-04-20 22:45:46,552 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:45:46,552 - INFO - Trial 2: cut weight = 11.0
+2025-04-20 22:45:46,561 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:45:46,561 - INFO - Trial 3: cut weight = 8.0
+2025-04-20 22:45:46,573 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:45:46,573 - INFO - Trial 4: cut weight = 9.0
+2025-04-20 22:45:46,579 - INFO - Success rate: 100.00% (1/1 trials found minimum cut)
+2025-04-20 22:45:46,579 - INFO - Trial 5: cut weight = 11.0
+2025-04-20 22:45:46,579 - INFO - \u03bb\u2096 estimation from 5 trials:
+2025-04-20 22:45:46,581 - INFO -   Minimum weight: 8.0
+2025-04-20 22:45:46,581 - INFO -   Average weight: 9.8
+2025-04-20 22:45:46,581 - INFO -   Variance: 1.3599999999999999
+2025-04-20 22:45:51,268 - INFO - Success rate: 0.56% (4/709 trials found minimum cut)

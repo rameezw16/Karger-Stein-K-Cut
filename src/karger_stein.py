@@ -596,4 +596,42 @@ class KargerStein:
         for i, node in enumerate(nodes):
             partition[i % k].add(node)
             
-        return partition 
+        return partition
+        
+    def _estimate_lambda_k_from_trials(self, num_samples: int = 10) -> float:
+        """
+        Estimate λₖ using sampled k-cut weights from multiple trials.
+        This provides a more accurate estimate by considering the distribution of observed weights.
+        
+        Args:
+            num_samples: Number of samples to use for estimation
+            
+        Returns:
+            Estimated value of λₖ
+        """
+        weights = []
+        min_weight = float('inf')
+        
+        # Run multiple trials and collect weights
+        for i in range(num_samples):
+            result = self.find_min_k_cut(num_trials=1)
+            weight = result['weight']
+            weights.append(weight)
+            
+            if weight < min_weight:
+                min_weight = weight
+                
+            # Log individual trial results
+            self.logger.log(f"Trial {i+1}: cut weight = {weight}")
+            
+        # Compute statistics
+        avg_weight = sum(weights) / num_samples
+        variance = sum((w - avg_weight) ** 2 for w in weights) / num_samples
+        
+        # Log summary statistics
+        self.logger.log(f"λₖ estimation from {num_samples} trials:")
+        self.logger.log(f"  Minimum weight: {min_weight}")
+        self.logger.log(f"  Average weight: {avg_weight}")
+        self.logger.log(f"  Variance: {variance}")
+        
+        return min_weight 

@@ -13,9 +13,8 @@ def print_step(step_num: int, description: str):
 def visualize_graph(graph: nx.Graph, title: str, filename: str = None):
     """Visualize the graph with edge weights."""
     plt.figure(figsize=(10, 8))
-    # Use grid layout for grid graphs
-    pos = {node: (node % cols, rows - 1 - node // cols) for node in graph.nodes()}
-    edge_labels = {(u, v): f"{data['weight']:.1f}" for u, v, data in graph.edges(data=True)}
+    pos = nx.spring_layout(graph, seed=42)  # Use consistent layout
+    edge_labels = {(u, v): f"{data['weight']}" for u, v, data in graph.edges(data=True)}
     
     # Draw nodes
     nx.draw_networkx_nodes(graph, pos, node_size=500, node_color='lightblue')
@@ -36,8 +35,7 @@ def visualize_graph(graph: nx.Graph, title: str, filename: str = None):
 def visualize_partitions(graph: nx.Graph, partitions: list, title: str, filename: str = None):
     """Visualize the graph with partitions highlighted."""
     plt.figure(figsize=(10, 8))
-    # Use grid layout for grid graphs
-    pos = {node: (node % cols, rows - 1 - node // cols) for node in graph.nodes()}
+    pos = nx.spring_layout(graph, seed=42)  # Use consistent layout
     
     # Define colors for partitions
     colors = ['lightblue', 'lightgreen', 'lightcoral', 'lightyellow', 'lightpink']
@@ -64,8 +62,7 @@ def visualize_partitions(graph: nx.Graph, partitions: list, title: str, filename
 def visualize_cut_edges(graph: nx.Graph, partitions: list, title: str, filename: str = None):
     """Visualize the graph with cut edges highlighted."""
     plt.figure(figsize=(10, 8))
-    # Use grid layout for grid graphs
-    pos = {node: (node % cols, rows - 1 - node // cols) for node in graph.nodes()}
+    pos = nx.spring_layout(graph, seed=42)  # Use consistent layout
     
     # Draw nodes
     nx.draw_networkx_nodes(graph, pos, node_size=500, node_color='lightgray')
@@ -93,31 +90,54 @@ def visualize_cut_edges(graph: nx.Graph, partitions: list, title: str, filename:
         plt.savefig(filename)
     plt.show()
 
+def print_graph_info(graph: nx.Graph):
+    """Print information about the graph."""
+    print("\nGraph Information:")
+    print(f"Number of nodes: {graph.number_of_nodes()}")
+    print(f"Number of edges: {graph.number_of_edges()}")
+    print("Edge weights:")
+    for u, v, data in graph.edges(data=True):
+        print(f"  Edge ({u}, {v}): weight = {data['weight']}")
+
+def print_partition_info(graph: nx.Graph, partitions: list, cut_weight: float):
+    """Print detailed information about the partitions."""
+    print("\nPartition Details:")
+    print(f"Total cut weight: {cut_weight}")
+    for i, partition in enumerate(partitions):
+        print(f"\nPartition {i+1}:")
+        print(f"  Size: {len(partition)} nodes")
+        print(f"  Nodes: {sorted(partition)}")
+        
+    # Print edges crossing partitions
+    print("\nEdges crossing partitions:")
+    for i in range(len(partitions)):
+        for j in range(i + 1, len(partitions)):
+            for u in partitions[i]:
+                for v in partitions[j]:
+                    if graph.has_edge(u, v):
+                        print(f"  Edge ({u}, {v}): weight = {graph[u][v]['weight']}")
+
 def main():
-    # Step 1: Create a grid graph
-    print_step(1, "Creating a grid graph")
-    global rows, cols  # Make rows and cols global for visualization functions
-    rows = 4
-    cols = 4
-    G = nx.grid_2d_graph(rows, cols)
+    # Step 1: Create a weighted graph
+    print_step(1, "Creating a weighted graph")
+    G = nx.Graph()
+    edges = [
+        (0, 1, 2.0),  # Edge from node 0 to 1 with weight 2.0
+        (1, 2, 3.0),  # Edge from node 1 to 2 with weight 3.0
+        (2, 0, 1.0),  # Edge from node 2 to 0 with weight 1.0
+        (2, 3, 4.0),  # Edge from node 2 to 3 with weight 4.0
+        (3, 0, 2.0)   # Edge from node 3 to 0 with weight 2.0
+    ]
+    G.add_weighted_edges_from(edges)
     
-    # Convert node labels from (x,y) to integers
-    mapping = {(i, j): i * cols + j for i in range(rows) for j in range(cols)}
-    G = nx.relabel_nodes(G, mapping)
-    
-    # Add weights to edges
-    for u, v in G.edges():
-        G[u][v]['weight'] = 1.0  # Unit weights for grid edges
-    
-    print(f"Created {rows}x{cols} grid graph with:")
-    print(f"  - {G.number_of_nodes()} nodes")
-    print(f"  - {G.number_of_edges()} edges")
-    print("\nEdge list with weights:")
-    for u, v, data in G.edges(data=True):
-        print(f"  Edge ({u}, {v}): weight {data['weight']}")
+    print("Graph created with the following edges:")
+    for u, v, weight in edges:
+        print(f"  Edge ({u}, {v}) with weight {weight}")
+    print(f"Total nodes: {G.number_of_nodes()}")
+    print(f"Total edges: {G.number_of_edges()}")
 
     # Visualize initial graph
-    visualize_graph(G, "Grid Graph", "grid_graph.png")
+    visualize_graph(G, "Initial Graph", "initial_graph.png")
 
     # Step 2: Initialize the Karger-Stein algorithm
     print_step(2, "Initializing Karger-Stein algorithm")
@@ -158,7 +178,7 @@ def main():
         print(f"    Nodes: {sorted(partition)}")
 
     # Visualize partitions
-    visualize_partitions(G, result['partitions'], "Grid Graph Partitions", "grid_partitions.png")
+    visualize_partitions(G, result['partitions'], "Graph Partitions", "partitions.png")
 
     # Step 6: Calculate cut edges
     print_step(6, "Calculating cut edges")
@@ -176,7 +196,7 @@ def main():
     print(f"Number of edges crossing partitions: {len(cut_edges)}")
 
     # Visualize cut edges
-    visualize_cut_edges(G, result['partitions'], "Grid Graph Cut Edges", "grid_cut_edges.png")
+    visualize_cut_edges(G, result['partitions'], "Cut Edges", "cut_edges.png")
 
     # Step 7: Verify all minimum cuts
     print_step(7, "Verifying all minimum cuts")
@@ -187,7 +207,7 @@ def main():
             print(f"  Partition {j+1}: {sorted(partition)}")
         
         # Visualize each alternative cut
-        visualize_partitions(G, cut, f"Grid Graph Alternative Cut {i+1}", f"grid_alternative_cut_{i+1}.png")
+        visualize_partitions(G, cut, f"Alternative Cut {i+1}", f"alternative_cut_{i+1}.png")
 
 if __name__ == "__main__":
     main() 
