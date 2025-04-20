@@ -2,6 +2,7 @@ import networkx as nx
 import json
 from typing import Dict, List, Tuple, Union
 import random
+import logging
 
 def contract_edge(graph: nx.Graph, edge: Tuple[int, int]) -> None:
     """
@@ -26,45 +27,113 @@ def contract_edge(graph: nx.Graph, edge: Tuple[int, int]) -> None:
     # Remove the contracted vertex
     graph.remove_node(v)
 
-def load_graph_from_file(file_path: str) -> nx.Graph:
+def load_graph_from_file(filepath: str) -> nx.Graph:
     """
-    Load a graph from a file.
+    Load a graph from a file. Supports multiple formats:
+    - .txt: Edge list format (u v weight)
+    - .json: JSON format with nodes and edges
     
     Args:
-        file_path: Path to the graph file
+        filepath: Path to the graph file
         
     Returns:
-        NetworkX graph object
+        NetworkX graph with weights
     """
-    with open(file_path, 'r') as f:
+    if filepath.endswith('.txt'):
+        return _load_edge_list(filepath)
+    elif filepath.endswith('.json'):
+        return _load_json(filepath)
+    else:
+        raise ValueError(f"Unsupported file format: {filepath}")
+
+def _load_edge_list(filepath: str) -> nx.Graph:
+    """
+    Load graph from edge list format.
+    Each line: u v weight
+    
+    Args:
+        filepath: Path to edge list file
+        
+    Returns:
+        NetworkX graph with weights
+    """
+    G = nx.Graph()
+    with open(filepath, 'r') as f:
+        for line in f:
+            if line.strip() and not line.startswith('#'):
+                try:
+                    u, v, weight = map(float, line.strip().split())
+                    G.add_edge(int(u), int(v), weight=weight)
+                except ValueError as e:
+                    logging.warning(f"Skipping invalid line: {line.strip()}")
+    return G
+
+def _load_json(filepath: str) -> nx.Graph:
+    """
+    Load graph from JSON format.
+    Expected format:
+    {
+        "nodes": [...],
+        "edges": [[u, v, weight], ...]
+    }
+    
+    Args:
+        filepath: Path to JSON file
+        
+    Returns:
+        NetworkX graph with weights
+    """
+    with open(filepath, 'r') as f:
         data = json.load(f)
     
-    graph = nx.Graph()
-    for edge in data['edges']:
-        graph.add_edge(edge['u'], edge['v'], weight=edge['weight'])
-    
-    return graph
+    G = nx.Graph()
+    G.add_nodes_from(data.get('nodes', []))
+    for u, v, weight in data.get('edges', []):
+        G.add_edge(u, v, weight=weight)
+    return G
 
-def save_graph_to_file(graph: nx.Graph, file_path: str) -> None:
+def save_graph_to_file(graph: nx.Graph, filepath: str) -> None:
     """
-    Save a graph to a file.
+    Save a graph to a file. Supports multiple formats:
+    - .txt: Edge list format
+    - .json: JSON format
     
     Args:
         graph: NetworkX graph to save
-        file_path: Path where to save the graph
+        filepath: Path to save the graph
+    """
+    if filepath.endswith('.txt'):
+        _save_edge_list(graph, filepath)
+    elif filepath.endswith('.json'):
+        _save_json(graph, filepath)
+    else:
+        raise ValueError(f"Unsupported file format: {filepath}")
+
+def _save_edge_list(graph: nx.Graph, filepath: str) -> None:
+    """
+    Save graph to edge list format.
+    
+    Args:
+        graph: NetworkX graph to save
+        filepath: Path to save the graph
+    """
+    with open(filepath, 'w') as f:
+        for u, v, data in graph.edges(data=True):
+            f.write(f"{u} {v} {data['weight']}\n")
+
+def _save_json(graph: nx.Graph, filepath: str) -> None:
+    """
+    Save graph to JSON format.
+    
+    Args:
+        graph: NetworkX graph to save
+        filepath: Path to save the graph
     """
     data = {
-        'edges': [
-            {
-                'u': u,
-                'v': v,
-                'weight': data['weight']
-            }
-            for u, v, data in graph.edges(data=True)
-        ]
+        'nodes': list(graph.nodes()),
+        'edges': [[u, v, data['weight']] for u, v, data in graph.edges(data=True)]
     }
-    
-    with open(file_path, 'w') as f:
+    with open(filepath, 'w') as f:
         json.dump(data, f, indent=2)
 
 def generate_random_graph(n: int, p: float, weight_range: Tuple[float, float] = (1.0, 10.0)) -> nx.Graph:
